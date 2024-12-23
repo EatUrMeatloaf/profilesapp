@@ -23,16 +23,33 @@ const client = generateClient({
 
 export default function App() {
   const [userprofiles, setUserProfiles] = useState([]);
-  const { signOut } = useAuthenticator((context) => [context.user]);
+  const { user, signOut } = useAuthenticator((context) => [context.user]); // Get the user object
 
   useEffect(() => {
-    fetchUserProfile();
-  }, []);
+    if (user) { // Only fetch if we have a user
+      fetchUserProfile();
+    }
+  }, [user]); // Add user as dependency
 
   async function fetchUserProfile() {
-    const { data: profiles } = await client.models.UserProfile.list();
-    setUserProfiles(profiles);
+    try {
+      // Filter to only get the current user's profile
+      const { data: profiles } = await client.models.UserProfile.list({
+        filter: {
+          profileOwner: {
+            eq: `${user.attributes.sub}::${user.username}`
+          }
+        }
+      });
+      setUserProfiles(profiles);
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
   }
+
+  // You can also add debug information to see what's happening
+  console.log('Current user:', user);
+  console.log('User profiles:', userprofiles);
 
   return (
     <Flex
@@ -44,6 +61,8 @@ export default function App() {
       margin="0 auto"
     >
       <Heading level={1}>My Profile</Heading>
+      {/* Add this to show the current user's username */}
+      <Heading level={2}>Welcome, {user?.username}</Heading>
 
       <Divider />
 
