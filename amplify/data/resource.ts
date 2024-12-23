@@ -1,17 +1,24 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
+// First, verify this import path is correct relative to your file structure
+import { postConfirmation } from "../auth/post-confirmation/resource";
 
-/*== STEP 1 ===============================================================
-The section below creates a Todo database table with a "content" field. Try
-adding a new "isDone" field as a boolean. The authorization rule below
-specifies that any unauthenticated user can "create", "read", "update", 
-and "delete" any "Todo" records.
-=========================================================================*/
 const schema = a.schema({
+  // Keep existing Todo model
   Todo: a
     .model({
       content: a.string(),
     })
     .authorization((allow) => [allow.guest()]),
+    
+  // Add new UserProfile model
+  UserProfile: a
+    .model({
+      email: a.string(),
+      profileOwner: a.string(),
+    })
+    .authorization((allow) => [
+      allow.ownerDefinedIn("profileOwner"),
+    ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
@@ -19,10 +26,12 @@ export type Schema = ClientSchema<typeof schema>;
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: 'iam',
+    defaultAuthorizationMode: 'apiKey',
+    apiKeyAuthorizationMode: {
+      expiresInDays: 30,
+    },
   },
 });
-
 /*== STEP 2 ===============================================================
 Go to your frontend source code. From your client-side code, generate a
 Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY

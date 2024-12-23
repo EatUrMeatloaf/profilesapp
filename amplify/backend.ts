@@ -1,11 +1,8 @@
 import { defineBackend } from '@aws-amplify/backend';
-import { auth } from './auth/resource';
+import { auth } from './auth/resource';  // Import from auth/resource.ts, not post-confirmation
 import { data } from './data/resource';
 
-/**
- * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
- */
-defineBackend({
+export const backend = defineBackend({
   auth,
   data,
 });
