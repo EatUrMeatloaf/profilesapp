@@ -1,8 +1,12 @@
 import { defineBackend } from '@aws-amplify/backend';
-import { auth } from './auth/resource';  // Import from auth/resource.ts, not post-confirmation
+import { auth } from './auth/resource';
 import { data } from './data/resource';
+import { defineFunction } from '@aws-amplify/backend';
 
-export const backend = defineBackend({
+const backend = defineBackend({
   auth,
   data,
 });
+
+// Export the backend
+export default backend;
