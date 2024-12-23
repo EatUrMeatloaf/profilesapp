@@ -50,6 +50,7 @@ export default function App() {
   // You can also add debug information to see what's happening
   console.log('Current user:', user);
   console.log('User profiles:', userprofiles);
+  console.log('User attributes:', user?.attributes);
 
   return (
     <Flex
@@ -62,7 +63,7 @@ export default function App() {
     >
       <Heading level={1}>My Profile</Heading>
       {/* Add this to show the current user's username */}
-      <Heading level={2}>Welcome, {user?.username}</Heading>
+      <Heading level={2}>Welcome, {user?.attributes?.email}</Heading>
 
       <Divider />
 
