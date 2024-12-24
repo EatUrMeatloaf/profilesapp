@@ -110,3 +110,4 @@ export default function App() {
       <Button onClick={signOut}>Sign Out</Button>
     </Flex>
   );
+}
