@@ -21,7 +21,7 @@ const client = generateClient({
   authMode: "userPool",
 });
 
-function App() {
+export default function App() {
   const [userprofiles, setUserProfiles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const { user, signOut } = useAuthenticator((context) => [context.user]); // Get the user object
@@ -110,11 +110,3 @@ function App() {
       <Button onClick={signOut}>Sign Out</Button>
     </Flex>
   );
-}
-export default function AuthWrapper() {
-  return (
-    <Authenticator>
-      <App />
-    </Authenticator>
-  );
-}
