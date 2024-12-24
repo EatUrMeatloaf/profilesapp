@@ -27,7 +27,9 @@ export default function App() {
   const { user, signOut } = useAuthenticator((context) => [context.user]); // Get the user object
 
   useEffect(() => {
-    if (user && user.attributes) { // Check for both user and user.attributes
+    console.log('User object:', user);
+    if (user) {
+      console.log('User attributes:', user.attributes); // Check for both user
       fetchUserProfile();
     }
   }, [user]); // Add user as dependency
